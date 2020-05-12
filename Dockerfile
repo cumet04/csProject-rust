@@ -17,3 +17,7 @@ RUN mkdir /home/app /app && \
     chown app:app /home/app /app
 USER app
 WORKDIR /app
+
+# rust tools
+RUN rustup component add rustfmt && \
+    cargo install cargo-edit
