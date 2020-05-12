@@ -26,7 +26,7 @@ const SCR_HEIGHT: u32 = 600;
 fn main() {
     let mut window = Window::new("csProject-rust", SCR_WIDTH, SCR_HEIGHT);
 
-    let shader = Shader::new("plain");
+    let shader = Shader::new("texture");
 
     let vao = unsafe {
         let mut vao = 0;
@@ -36,12 +36,12 @@ fn main() {
     };
 
     let vbo = {
-        let vertices: [f32; 44] = [
-            // positions, colors, texture coords, normal
-            0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, // top right
-            0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, // bottom right
-            -0.5, -0.5, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, // bottom left
-            -0.5, 0.5, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // top left
+        let vertices: [f32; 32] = [
+            // positions, texture coords, normal
+            0.5, 0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, // top right
+            0.5, -0.5, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, // bottom right
+            -0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, // bottom left
+            -0.5, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, // top left
         ];
 
         let mut vbo = 0;
@@ -79,40 +79,30 @@ fn main() {
     };
 
     unsafe {
-        let stride = 11 * mem::size_of::<GLfloat>() as GLsizei;
+        let stride = 8 * mem::size_of::<GLfloat>() as GLsizei;
         // position attribute
         gl::VertexAttribPointer(0, 3, gl::FLOAT, gl::FALSE, stride, ptr::null());
         gl::EnableVertexAttribArray(0);
-        // color attribute
+        // texture coord attribute
         gl::VertexAttribPointer(
             1,
-            3,
+            2,
             gl::FLOAT,
             gl::FALSE,
             stride,
             (3 * mem::size_of::<GLfloat>()) as *const c_void,
         );
         gl::EnableVertexAttribArray(1);
-        // texture coord attribute
-        gl::VertexAttribPointer(
-            2,
-            2,
-            gl::FLOAT,
-            gl::FALSE,
-            stride,
-            (6 * mem::size_of::<GLfloat>()) as *const c_void,
-        );
-        gl::EnableVertexAttribArray(2);
         // normal attribute
         gl::VertexAttribPointer(
-            3,
+            2,
             3,
             gl::FLOAT,
             gl::FALSE,
             stride,
-            (8 * mem::size_of::<GLfloat>()) as *const c_void,
+            (5 * mem::size_of::<GLfloat>()) as *const c_void,
         );
-        gl::EnableVertexAttribArray(3);
+        gl::EnableVertexAttribArray(2);
     }
 
     let texture = {
