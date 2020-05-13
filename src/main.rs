@@ -93,6 +93,11 @@ fn main() {
         );
 
         gl::BindVertexArray(object.vao);
-        gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, ptr::null());
+        gl::DrawElements(
+            gl::TRIANGLES,
+            object.vertices_count,
+            gl::UNSIGNED_INT,
+            ptr::null(),
+        );
     });
 }

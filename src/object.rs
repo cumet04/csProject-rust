@@ -7,6 +7,7 @@ use gl::types::*;
 
 pub struct Object {
     pub vao: u32,
+    pub vertices_count: i32, // number of vertex, for gl::DrawElements arg
     vbo: u32,
     ebo: u32,
 }
@@ -16,6 +17,7 @@ impl Object {
     pub fn new(vertices: Vec<[f32; 8]>, indices: Vec<[i32; 3]>) -> Object {
         let mut obj = Object {
             vao: 0,
+            vertices_count: 0,
             vbo: 0,
             ebo: 0,
         };
@@ -31,6 +33,7 @@ impl Object {
             let mut vbo = 0;
 
             let joined = vertices.concat();
+            obj.vertices_count = joined.len() as i32;
             unsafe {
                 gl::GenBuffers(1, &mut vbo);
                 gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
