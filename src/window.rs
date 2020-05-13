@@ -4,6 +4,8 @@ use self::glfw::{Action, Context, Key};
 use std::sync::mpsc::Receiver;
 
 pub struct Window {
+    pub width: u32,
+    pub height: u32,
     glfw: glfw::Glfw,
     window: glfw::Window,
     events: Receiver<(f64, glfw::WindowEvent)>,
@@ -36,12 +38,14 @@ impl Window {
             glfw: glfw,
             window: window,
             events: events,
+            width: width,
+            height: height,
         }
     }
 
     pub fn render_loop<F>(&mut self, f: F)
     where
-        F: Fn(),
+        F: Fn(&Window),
     {
         while !self.window.should_close() {
             // events
@@ -57,7 +61,7 @@ impl Window {
                 }
             }
 
-            f();
+            f(self);
 
             // glfw: swap buffers and poll IO events
             self.window.swap_buffers();
