@@ -1,5 +1,3 @@
-use std::ptr;
-
 extern crate gl;
 
 extern crate cgmath;
@@ -53,13 +51,6 @@ fn main() {
             "projection",
             &perspective(Deg(45.0), aspect_rate, 0.1, 100.0),
         );
-
-        gl::BindVertexArray(object.vao);
-        gl::DrawElements(
-            gl::TRIANGLES,
-            object.vertices_count,
-            gl::UNSIGNED_INT,
-            ptr::null(),
-        );
+        object.draw();
     });
 }

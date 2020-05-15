@@ -6,8 +6,8 @@ use gl;
 use gl::types::*;
 
 pub struct Object {
-    pub vao: u32,
-    pub vertices_count: i32, // number of vertex, for gl::DrawElements arg
+    vao: u32,
+    vertices_count: i32, // number of vertex, for gl::DrawElements arg
     vbo: u32,
     ebo: u32,
 }
@@ -99,6 +99,16 @@ impl Object {
         }
 
         obj
+    }
+
+    pub unsafe fn draw(&self) {
+        gl::BindVertexArray(self.vao);
+        gl::DrawElements(
+            gl::TRIANGLES,
+            self.vertices_count,
+            gl::UNSIGNED_INT,
+            ptr::null(),
+        );
     }
 }
 
