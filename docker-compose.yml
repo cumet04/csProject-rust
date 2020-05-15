@@ -7,3 +7,5 @@ services:
     tty: true
     volumes:
       - ".:/app"
+      - "~/.ssh:/home/app/.ssh"
+      - "~/.gitconfig:/home/app/.gitconfig"
