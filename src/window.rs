@@ -48,11 +48,11 @@ impl Window {
         }
     }
 
-    pub fn render_loop<F>(&mut self, f: F)
+    pub fn render_loop<F>(&mut self, mut f: F)
     where
-        F: Fn(&Window, &i32),
+        F: FnMut(&Window, f64),
     {
-        let mut count = 0;
+        self.glfw.set_time(0.);
         while !self.window.should_close() {
             // events
             for (_, event) in glfw::flush_messages(&self.events) {
@@ -69,8 +69,8 @@ impl Window {
                 }
             }
 
-            f(self, &count);
-            count = count + 3;
+            f(self, self.glfw.get_time());
+            self.glfw.set_time(0.);
 
             // glfw: swap buffers and poll IO events
             self.window.swap_buffers();
