@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     libxinerama-dev \
     libxcursor-dev \
     libxi-dev \
+    mingw-w64 \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -17,6 +18,9 @@ RUN mkdir /home/app /app && \
     chown app:app /home/app /app
 USER app
 WORKDIR /app
+
+# for windows build
+RUN rustup target add x86_64-pc-windows-gnu
 
 # rust tools
 RUN rustup component add rustfmt && \
