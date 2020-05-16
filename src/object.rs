@@ -14,7 +14,7 @@ pub struct Object {
 
 impl Object {
     // verticies: [pos.x,pos.y,pos.z, tex.u,tex.v, normal.x,normal.y,normal.z]
-    pub fn new(vertices: Vec<[f32; 8]>, indices: Vec<[i32; 3]>) -> Object {
+    pub fn new(vertices: Vec<[f64; 8]>, indices: Vec<[i32; 3]>) -> Object {
         let mut obj = Object {
             vao: 0,
             vertices_count: 0,
@@ -32,7 +32,11 @@ impl Object {
         obj.vbo = {
             let mut vbo = 0;
 
-            let joined = vertices.concat();
+            let joined = vertices
+                .concat()
+                .iter()
+                .map(|&v| v as f32)
+                .collect::<Vec<f32>>();
             obj.vertices_count = joined.len() as i32;
             unsafe {
                 gl::GenBuffers(1, &mut vbo);

@@ -45,8 +45,9 @@ impl Window {
 
     pub fn render_loop<F>(&mut self, f: F)
     where
-        F: Fn(&Window),
+        F: Fn(&Window, &i32),
     {
+        let mut count = 0;
         while !self.window.should_close() {
             // events
             for (_, event) in glfw::flush_messages(&self.events) {
@@ -61,7 +62,8 @@ impl Window {
                 }
             }
 
-            f(self);
+            f(self, &count);
+            count = count + 3;
 
             // glfw: swap buffers and poll IO events
             self.window.swap_buffers();
