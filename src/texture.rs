@@ -1,8 +1,8 @@
 use std::os::raw::c_void;
-use std::path::Path;
 
 use image::GenericImageView;
 
+static TEXTURES: include_dir::Dir = include_dir!("./resources/textures");
 pub struct Texture {
     pub id: u32,
 }
@@ -12,8 +12,13 @@ impl Texture {
         let mut texture = 0;
 
         // load image, create texture and generate mipmaps
-        let filepath = format!("resources/textures/{}", filename);
-        let img = image::open(&Path::new(&filepath)).unwrap();
+        let img = image::load_from_memory(
+            TEXTURES
+                .get_file(format!("{}", filename))
+                .unwrap()
+                .contents(),
+        )
+        .unwrap();
         let data = img.to_bytes();
         let (width, height) = img.dimensions();
         unsafe {

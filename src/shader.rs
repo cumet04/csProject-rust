@@ -1,6 +1,4 @@
 use std::ffi::CString;
-use std::fs::File;
-use std::io::Read;
 use std::ptr;
 use std::str;
 
@@ -9,6 +7,8 @@ use gl::types::*;
 
 // use cgmath::prelude::*;
 use cgmath::{Matrix, Matrix4 /*, Vector3*/};
+
+static SHADERS: include_dir::Dir = include_dir!("./resources/shaders");
 
 pub struct Shader {
     pub id: u32,
@@ -19,16 +19,20 @@ impl Shader {
         let mut shader = Shader { id: 0 };
 
         // read shader files
-        let mut v_file = File::open(format!("src/shaders/{}.vs", shader_name)).unwrap();
-        let mut f_file = File::open(format!("src/shaders/{}.fs", shader_name)).unwrap();
-
-        let mut v_str = String::new();
-        let mut f_str = String::new();
-        v_file.read_to_string(&mut v_str).unwrap();
-        f_file.read_to_string(&mut f_str).unwrap();
-
-        let v_cstr = CString::new(v_str.as_bytes()).unwrap();
-        let f_cstr = CString::new(f_str.as_bytes()).unwrap();
+        let v_cstr = CString::new(
+            SHADERS
+                .get_file(format!("{}.vs", shader_name))
+                .unwrap()
+                .contents(),
+        )
+        .unwrap();
+        let f_cstr = CString::new(
+            SHADERS
+                .get_file(format!("{}.fs", shader_name))
+                .unwrap()
+                .contents(),
+        )
+        .unwrap();
 
         // compile and attach shaders
         unsafe {

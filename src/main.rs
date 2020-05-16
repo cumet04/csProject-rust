@@ -7,11 +7,9 @@ extern crate image;
 
 extern crate cs_project_rust;
 
-use cs_project_rust::window::Window;
-
 use cs_project_rust::shader::Shader;
-
 use cs_project_rust::sphere::Sphere;
+use cs_project_rust::window::Window;
 
 fn main() {
     let mut window = Window::new("csProject-rust", 800, 600);
