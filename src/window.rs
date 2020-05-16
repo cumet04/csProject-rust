@@ -4,15 +4,15 @@ use self::glfw::{Action, Context, Key};
 use std::sync::mpsc::Receiver;
 
 pub struct Window {
-    pub width: u32,
-    pub height: u32,
+    pub width: i32,
+    pub height: i32,
     glfw: glfw::Glfw,
     window: glfw::Window,
     events: Receiver<(f64, glfw::WindowEvent)>,
 }
 
 impl Window {
-    pub fn new(title: &str, width: u32, height: u32) -> Window {
+    pub fn new(title: &str, width: i32, height: i32) -> Window {
         // glfw: initialize and configure
         let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
         glfw.window_hint(glfw::WindowHint::ContextVersion(3, 3));
@@ -24,7 +24,12 @@ impl Window {
 
         // glfw window creation
         let (mut window, events) = glfw
-            .create_window(width, height, title, glfw::WindowMode::Windowed)
+            .create_window(
+                width as u32,
+                height as u32,
+                title,
+                glfw::WindowMode::Windowed,
+            )
             .expect("Failed to create GLFW window");
 
         window.make_current();
@@ -53,7 +58,9 @@ impl Window {
             for (_, event) in glfw::flush_messages(&self.events) {
                 match event {
                     glfw::WindowEvent::FramebufferSize(width, height) => unsafe {
-                        gl::Viewport(0, 0, width, height)
+                        gl::Viewport(0, 0, width, height);
+                        self.width = width;
+                        self.height = height;
                     },
                     glfw::WindowEvent::Key(Key::Escape, _, Action::Press, _) => {
                         self.window.set_should_close(true)
