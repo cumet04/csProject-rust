@@ -24,6 +24,7 @@ fn main() {
 
         gl::Enable(gl::DEPTH_TEST);
         gl::Enable(gl::CULL_FACE);
+        gl::FrontFace(gl::CW);
 
         shader.use_program();
 
