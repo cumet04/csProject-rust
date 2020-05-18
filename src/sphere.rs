@@ -26,17 +26,17 @@ impl Sphere {
                 let (x, y, z) = (idir.sin() * jdir.cos(), idir.sin() * jdir.sin(), idir.cos());
                 vertices.push([x * radius, y * radius, z * radius, jrate, irate, x, y, z]);
 
-                if i > 0 {
-                    indices.push([
-                        j + (i - 1) * slices,
-                        j + 1 + (i - 1) * slices,
-                        j + 1 + i * slices,
-                    ]);
-                    indices.push([
-                        j + 1 + (i - 1) * slices,
-                        j + 2 + i * slices,
-                        j + 1 + i * slices,
-                    ]);
+                // indices
+                if j == slices {
+                    continue;
+                }
+                let p = i * (slices + 1) + j;
+                let pn = (i + 1) * (slices + 1) + j;
+                if i != 0 {
+                    indices.push([p, p + 1, pn + 1]);
+                }
+                if i != stacks {
+                    indices.push([p, pn + 1, pn]);
                 }
             }
         }
