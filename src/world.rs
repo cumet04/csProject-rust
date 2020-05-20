@@ -1,13 +1,13 @@
 use super::window::Window;
 use gl;
 
-pub struct World<TF> {
+pub struct World {
     window: Window,
-    timer_func: TF,
+    timer_func: Box<dyn FnMut(f64)>,
 }
 
-impl<TF: FnMut(f64)> World<TF> {
-    pub fn new(title: &str, width: i32, height: i32) -> World<Box<dyn FnMut(f64)>> {
+impl World {
+    pub fn new(title: &str, width: i32, height: i32) -> World {
         let window = Window::new(title, width, height);
 
         World {
@@ -16,7 +16,7 @@ impl<TF: FnMut(f64)> World<TF> {
         }
     }
 
-    pub fn set_timer_func(&mut self, f: TF) {
+    pub fn set_timer_func(&mut self, f: Box<dyn FnMut(f64)>) {
         self.timer_func = f;
     }
 

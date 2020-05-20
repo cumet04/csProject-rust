@@ -12,7 +12,7 @@ use cs_project_rust::sphere::Sphere;
 use cs_project_rust::world::World;
 
 fn main() {
-    let mut world = World::<Box<dyn FnMut(f64)>>::new("csProject-rust", 800, 600);
+    let mut world = World::new("csProject-rust", 800, 600);
 
     let shader = Shader::new("texture");
     let sphere = Sphere::new(0.5, 32, 32, "earthmap.jpg");
