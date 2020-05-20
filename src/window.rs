@@ -48,10 +48,7 @@ impl Window {
         }
     }
 
-    pub fn render_loop<F>(&mut self, mut f: F)
-    where
-        F: FnMut(&Window, f64),
-    {
+    pub fn render_loop<F: FnMut(f64)>(&mut self, mut f: F) {
         self.glfw.set_time(0.);
         while !self.window.should_close() {
             // events
@@ -69,7 +66,7 @@ impl Window {
                 }
             }
 
-            f(self, self.glfw.get_time());
+            f(self.glfw.get_time());
             self.glfw.set_time(0.);
 
             // glfw: swap buffers and poll IO events
