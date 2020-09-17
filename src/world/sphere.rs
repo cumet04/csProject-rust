@@ -1,11 +1,21 @@
-use super::object::Object;
-use super::texture::Texture;
+use super::graphics::object::Object;
+use super::graphics::texture::Texture;
+use super::Timed;
 
+use cgmath::Matrix4;
 use std::f64::consts::PI;
 
 pub struct Sphere {
     object: Object,
     texture: Texture,
+    pub translate: Matrix4<f32>,
+    timer_func: Box<dyn FnMut(&mut Self, f64)>,
+}
+
+impl Timed for Sphere {
+    fn elapse_time(&mut self, delta: f64) {
+        (self.timer_func)(self, delta);
+    }
 }
 
 impl Sphere {
@@ -44,10 +54,17 @@ impl Sphere {
         Sphere {
             object: Object::new(vertices, indices),
             texture: Texture::new(texture),
+            translate: Matrix4::from_scale(1.),
+            timer_func: Box::new(|_, _| {}),
         }
     }
+    pub fn set_timer_func(&mut self, f: Box<dyn FnMut(&mut Self, f64)>) {
+        self.timer_func = f;
+    }
+}
 
-    pub unsafe fn draw(&self) {
+impl super::Object for Sphere {
+    unsafe fn draw(&self) {
         gl::BindTexture(gl::TEXTURE_2D, self.texture.id);
         self.object.draw();
     }
